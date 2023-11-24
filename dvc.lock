@@ -1,0 +1,113 @@
+schema: '2.0'
+stages:
+  data_ingestion:
+    cmd: python src/AgeDetection/pipeline/stage_01_data_ingestion.py
+    deps:
+    - path: config/config.yaml
+      hash: md5
+      md5: 365e1d4a284bc0f778bcaa40fb36ac94
+      size: 584
+    - path: src/AgeDetection/pipeline/stage_01_data_ingestion.py
+      hash: md5
+      md5: 12360d421266faa371a2994f5c420ef5
+      size: 899
+    outs:
+    - path: artifacts/data_ingestion/train
+      hash: md5
+      md5: 630dc6049910cacaed9328715cea2787.dir
+      size: 301412909
+      nfiles: 125
+  prepare_base_model:
+    cmd: python src/AgeDetection/pipeline/stage_02_prepare_base_model.py
+    deps:
+    - path: config/config.yaml
+      hash: md5
+      md5: 365e1d4a284bc0f778bcaa40fb36ac94
+      size: 584
+    - path: src/AgeDetection/pipeline/stage_02_prepare_base_model.py
+      hash: md5
+      md5: 1a6a29f352e993157e845c45ea998ec2
+      size: 998
+    params:
+      params.yaml:
+        CLASSES: 5
+        IMAGE_SIZE:
+        - 224
+        - 224
+        - 3
+        INCLUDE_TOP: false
+        LEARNING_RATE: 0.01
+        WEIGHTS: imagenet
+    outs:
+    - path: artifacts/prepare_base_model
+      hash: md5
+      md5: 4bd156e2ef07f95cfe3d228bdfad4bac.dir
+      size: 118356624
+      nfiles: 2
+  training:
+    cmd: python src/AgeDetection/pipeline/stage_03_model_training.py
+    deps:
+    - path: artifacts/data_ingestion/train
+      hash: md5
+      md5: 630dc6049910cacaed9328715cea2787.dir
+      size: 301412909
+      nfiles: 125
+    - path: artifacts/prepare_base_model
+      hash: md5
+      md5: 4bd156e2ef07f95cfe3d228bdfad4bac.dir
+      size: 118356624
+      nfiles: 2
+    - path: config/config.yaml
+      hash: md5
+      md5: 365e1d4a284bc0f778bcaa40fb36ac94
+      size: 584
+    - path: src/AgeDetection/pipeline/stage_03_model_training.py
+      hash: md5
+      md5: 855f738a5942d052cc826c7a7e927803
+      size: 924
+    params:
+      params.yaml:
+        AUGMENTATION: true
+        BATCH_SIZE: 16
+        EPOCHS: 3
+        IMAGE_SIZE:
+        - 224
+        - 224
+        - 3
+    outs:
+    - path: artifacts/training/model.h5
+      hash: md5
+      md5: de5a59977db19b5c93efb0e33fe21270
+      size: 59940152
+  evaluation:
+    cmd: python src/AgeDetection/pipeline/stage_04_model_evaluation.py
+    deps:
+    - path: artifacts/data_ingestion/train
+      hash: md5
+      md5: 630dc6049910cacaed9328715cea2787.dir
+      size: 301412909
+      nfiles: 125
+    - path: artifacts/training/model.h5
+      hash: md5
+      md5: de5a59977db19b5c93efb0e33fe21270
+      size: 59940152
+    - path: config/config.yaml
+      hash: md5
+      md5: 365e1d4a284bc0f778bcaa40fb36ac94
+      size: 584
+    - path: src/AgeDetection/pipeline/stage_04_model_evaluation.py
+      hash: md5
+      md5: c6d63935957eff78e4bc3e8f8b05c0f0
+      size: 933
+    params:
+      params.yaml:
+        BATCH_SIZE: 16
+        IMAGE_SIZE:
+        - 224
+        - 224
+        - 3
+    outs:
+    - path: scores.json
+      hash: md5
+      md5: 20a36d334d93ebd5c8ee195ec083041c
+      size: 71
