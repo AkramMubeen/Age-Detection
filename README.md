@@ -5,7 +5,7 @@ End to End Deep Learning Project.
 
 ## Overview:
 
-DeepAge is a comprehensive end-to-end deep learning project developed in Python for age detection. The model architecture is based on VGG16 and was trained for a limited number of epochs on a local CPU. This project utilizes state-of-the-art neural networks to predict the age of individuals based on input images, and Flask is employed as the web framework for deployment.The data is gathered and loaded via google drive link and was deployed to cloud.
+DeepAge is a comprehensive end-to-end deep learning project developed in Python for age detection. The model architecture is based on VGG16 and was trained for a limited number of epochs on a local CPU. This project utilizes state-of-the-art neural networks to predict the age of individuals based on input images, and Flask is employed as the web framework for deployment.The data is gathered and loaded via google drive link and was deployed to AWS cloud.
 
 ## Technologies Used:
 
@@ -107,7 +107,7 @@ Update the params.yaml file to use the project as you like.
 
 ## Deployment:
 
-The application was successfully deployed to Heroku, offering a live and accessible platform for users to experience the age detection model in action which was shut down after testing.
+The application was successfully deployed to AWS, offering a live and accessible platform for users to experience the age detection model in action which was shut down after testing.
 
 
 ## License:
